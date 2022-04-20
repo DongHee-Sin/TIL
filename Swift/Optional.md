@@ -17,8 +17,46 @@ var someInt: Int?  // 이처럼 선언만 하고 값을 초기화하지 않으�
 print(someInt)     // nil
 ```
 
+<br/>
+
 ### nil은 실제로 값이 없는게 아니라 값이 없음을 표현하는 키워드
 ### 옵셔널 타입은 내부적으로 enum으로 구성되어 있다. (데이터 타입 & nil)
+```swift
+// 옵셔널 타입의 내부 구현
+enum Optional<Wrapped> {  // 제네릭 문법
+    case some(Wrapped)    // 연관값 Wrapped는 Type이름 (ex. String, Int...)
+    case none             // (= nil)
+}
+```
+
+<br/>
+
+### **구현 예시**
+```swift
+enum Optional {
+    case some(Int)
+    case none
+}
+
+let someInt: Optional = .some(5)
+
+print(someInt)  // some(5)
+```
+
+<br/>
+
+### **옵셔널 추출 예시** (애플이 미리 만들어둠)
+```swift
+// 열거형의 연관값 데이터를 바인딩시키는 방식으로 추출함
+var someInt: Int? = 5
+
+switch someInt {
+case .some(let value):
+    print(value)
+case .none:
+    print("nil")
+}
+```
 
 <br/>
 
