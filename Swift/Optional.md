@@ -173,3 +173,61 @@ someFunction(name: "홍길동", age: nil)
 
 someFunction(name: "김개똥")
 ```
+
+<br/>
+
+---
+
+<br/>
+
+## IUO (옵셔널 묵시적 추출)
+### 별도의 옵셔널 추출 과정 없이 자동으로 옵셔널이 해제되는 방식
+### Optional Type이며, Non-Optional Type으로 처리해야 하는 상황이 생기면 값을 자통으로 추출
+
+<br/>
+
+### 값을 강제로 추출하기 때문에 nil이 들어있는 상태에서 접근하면 런티임 에러가 발생한다.
+
+<br/>
+
+```swift
+// ? 가 아닌 ! 키워드를 통해 타입을 선언함
+var someValue: Int! = 5
+
+print(someValue)    // Optional(5)
+
+// Non-Optional Type에 할당
+var someValue2: Int = someValue
+
+print(someValue2)   // 5
+```
+
+<br/>
+
+### 즉, 위 코드처럼 IUO를 직접 사용할 때에는 Optional타입으로 사용된다.
+### IUO값을 Non-Optional Type에 할당할 때 별도 추출 과정을 생략하고 할당이 가능한것.
+
+<br/>
+
+### IUO는 프로퍼티 지연 초기화를 위해서 사용한다. (lazy var와 비슷)
+
+<br/>
+<br/>
+
+### **언제 사용할까???**
+```swift
+// 스토리보드 인스턴스의 연결
+@IBOutlet weak var someLabel: UILabel!
+```
+
+<br/>
+
+### 위 코드처럼 @IBOutlet에 IUO가 사용되는 이유 :
+* IUO를 사용하지 않으면 ViewController가 생성되는 시점에 UILabel의 인스턴스가 존재해야 한다.
+* 그런데 스토리보드로 UI를 생성하면 ViewController의 인스턴스가 먼저 생성된 후, 스토리보드 인스턴스들이 연결되는 구조로 동작한다.
+* 옵셔널로 처리하지 않으면 ViewController 인스턴스가 생성될 때에는 스토리보드 인스턴스는 메모리에 올라오지 않았으므로 에러가 나온다.
+
+<br/>
+
+* ==> IUO로 선언해두면 ViewController의 인스턴스가 생성될 때 일단 옵셔널과 동일하게 nil로 초기화가 되고, 바로 직후에 스토리보드 인스턴스들이 연결된다.
+* ==> 각 스토리보드 인스턴스는 IUO로 선언되어 있기 때문에 내부에서 접근할 때 옵셔널 체이닝을 하지 않아도 바로 사용이 가능하게 되는것
