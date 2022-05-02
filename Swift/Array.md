@@ -176,3 +176,40 @@ for tuple in someArray.enumerated() {
     print(tuple.element)
 }
 ```
+
+<br/>
+
+---
+
+<br/>
+
+## removeLast VS popLast
+### **공통점** :
+#### 배열의 마지막 요소를 삭제한 후 반환한다.
+
+<br/>
+
+### **차이점** :
+### (1)
+#### removeLast의 반환값 => Non-Optional Type
+#### popLast의 반환값 => Optional Type
+
+<br/>
+
+#### 즉, 빈 배열에 각각의 메서드를 실행했을 때 
+#### removeLast는 런타임에러를 반환하는 반면
+#### popLast는 nil을 반환한다.
+
+<br/>
+
+### (2)
+
+#### 반환된 요소를 사용하지 않는 경우 popLast()에 @discardableResult를 사용해야 하는 반면 removeLast()는 필요하지 않음
+
+```swift
+var testArray: [Int] = []
+
+testArray.removeLast()
+
+testArray.popLast()   // Result of call to 'popLast()' is unused
+```
