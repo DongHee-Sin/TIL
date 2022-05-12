@@ -231,3 +231,89 @@ print(someValue2)   // 5
 
 * ==> IUO로 선언해두면 ViewController의 인스턴스가 생성될 때 일단 옵셔널과 동일하게 nil로 초기화가 되고, 바로 직후에 스토리보드 인스턴스들이 연결된다.
 * ==> 각 스토리보드 인스턴스는 IUO로 선언되어 있기 때문에 내부에서 접근할 때 옵셔널 체이닝을 하지 않아도 바로 사용이 가능하게 되는것
+
+<br/>
+
+---
+
+<br/>
+
+## 옵셔널 체이닝
+#### 옵셔널 타입에 대해, 접근연산자를 호출하는 방법
+#### 접근연산자(.)를 사용하여 옵셔널 타입에 접근시 "?" 키워드를 사용하는 것 ==> 앞의 값이 옵셔널일 가능성을 내포한다는 의미
+* 체이닝의 결과는 항상 옵셔널이다. (마지막으로 접근한 타입이 옵셔널이 아니더라도)
+* 체이닝 과정에서 nil이 하나라도 있다면, 이후 표현식을 평가하지 않고 nil을 반환
+
+<br/>
+
+```swift
+class Dog {
+    var name: String?
+    var weight: Int
+    
+    init(name: String, weight: Int) {
+        self.name = name
+        self.weight = weight
+    }
+}
+
+
+class Person {
+    var dog: Dog?
+}
+
+
+let dong: Person? = Person()
+
+dong?.dog?.name   // nil
+
+dong?.dog = Dog(name: "콩", weight: 10)
+
+dong?.dog?.name   // Optional("콩")
+```
+
+<br/>
+<br/>
+
+### 실제 데이터를 사용하기 위해서는 결국 언래핑 과정이 필요함
+1. 값이 있음이 확실한 경우 ? 대신 !를 사용하여 강제 언래핑 가능
+2. 옵셔널 바인딩
+3. 닐 코얼레싱 연산자 (??)
+
+<br/>
+
+---
+
+<br/>
+
+### 아래 내용은 주교재 270~ 참고
+
+<br/>
+
+### 함수 관련 표기법
+#### cat 인스턴스의 myMaster 함수에 접근하여 리턴값으로 받는 인스턴스의 name프로퍼티로 접근하는 체이닝
+#### 함수 실행() 앞의 "?"는 함수 자체가 옵셔널임을 나타내고, 실행문 뒤의 "?"는 함수의 리턴값이 옵셔널타입임을 나타냄
+```swift
+cat?.myMaster?()?.name
+```
+
+<br/>
+
+### Dictionary 관련 표기법
+#### library 인스턴스의 books라는 딕셔너리 저장 프로퍼티에 접근하여 value의 저장 프로퍼티 name에 접근하는 체이닝
+```swift
+// books?           ==> 딕셔너리(저장 프로퍼티)가 옵셔널 타입
+// books["Apple"]?  ==> 딕셔너리의 결과값(value)이 없을 수 있다는 의미 (원래 옵셔널임)
+library.books?["Apple"]?.name
+```
+
+<br/>
+
+### 옵셔널 체이닝에서 함수의 실행
+```swift
+var bori: Dog? = Dog(name: "보리", weight: 20)
+
+bori?.layDown()
+bori?.sit()             
+```
+#### 앞의 타입이 nil일 경우 메서드가 실행되지 않음
