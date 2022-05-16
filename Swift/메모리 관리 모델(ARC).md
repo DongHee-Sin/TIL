@@ -11,7 +11,7 @@
 
 <br/>
 
-#### ☝️ 실제 힙영역에 저장되는 클래스의 인스턴스는 클래스의 주소(데이터영역)와 RC를 추가로 저장한다.
+#### ☝️ 클래스의 인스턴스는 클래스의 주소(데이터영역)와 RC를 추가로 저장한다.
 
 <br/>
 
@@ -86,6 +86,21 @@ dog1 = nil                                // RC - 1   RC == 0    // 메모리 �
 
 <br/>
 
+### RC가 증가하는 경우
+1. 인스턴스를 새로 생성할 때
+2. 기존 인스턴스를 다른 변수에 대입(할당)할 때
+
+<br/>
+
+### RC가 감소하는 경우
+1. 인스턴스를 참조하던 변수가 메모리에서 해제되는 경우
+2. 참조하던 변수에 nil이 할당되는 경우
+3. 참조하던 변수에 다른 값을 할당하는 경우
+4. 프로퍼티로 참조를 저장하다가, 속해 있는 인스턴스가 메모리에서 해제되는 경우
+
+
+<br/>
+
 ---
 
 <br/>
@@ -151,6 +166,7 @@ gildong = nil     // deinit() 실행 X
 
 ## Weak Reference
 #### 인스턴스를 참조하는 변수 앞에 weak키워드 추가
+#### 참조하던 인스턴스가 메모리에서 해제된 경우, 자동으로 nil이 할당된다.
 
 <br/>
 
@@ -211,6 +227,9 @@ bori?.owner   // nil
 ```
 
 <br/>
+
+---
+
 <br/>
 
 ## Unowned Reference
@@ -282,14 +301,83 @@ bori?.owner
 
 ### **Weak** : 소유자에 비해, 짧은 생명주기를 가진 인스턴스를 참조할 때 주로 사용
 #### ==> 인스턴스를 nil로 확인 가능 / nil인 경우 작업을 중단하는 분기처리 가능
+#### 항상 Optional Type이기 때문에 바인딩을 필요로 함
 
 <br/>
 
 ### **Unowned** : 소유자 보다 인스턴스의 생명주기가 더 길거나, 같은 경우 사용
 #### ==> 인스턴스 nil로 확인 불가 / 참조하던 인스턴스가 해제되었는데 접근하면 에러 발생
+#### Non-Optional Type으로 사용 가능 (에러 가능성이 있긴 하지만 바인딩을 필요로 하지 않음)
 
 <br/>
 <br/>
 
 #### ==> unowned는 사용시 고려해야할 것이 있어서(nil), 실제 프로젝트는 weak 키워드를 많이 사용함
 #### 이론적으로는 unowned가 살짝 더 빠름..!!
+
+<br/>
+<br/>
+
+---
+
+<br/>
+<br/>
+
+## unowned를 사용하기 좋은(?) 상황
+#### 인스턴스-클로저의 강한 참조 순환 해결
+
+<br/>
+
+```swift
+// 순환참조가 발생하는 코드
+class Human {
+    var name = "NAME"
+    lazy var getName: () -> String = {   // lazy를 지우면 Cannot find 'self' in scope 에러 발생
+        return self.name                 // 클래스를 정의하는 시점에는 self(인스턴스)가 없으니깐(?)
+    }
+    
+    init(name: String) {
+        self.name = name
+    }
+ 
+    deinit {
+        print("Deinit!")
+    }
+}
+
+var human: Human? = .init(name: "NAME")
+print(human!.getName())  //
+
+
+human = nil  // deinit 호출 X
+
+
+
+// ------------------------------------------------------------------------------------------------
+
+// 순환참조 해결
+class Human {
+    var name = "NAME"
+    lazy var getName: () -> String = { [unowned self] in
+        return self.name
+    }
+    
+    init(name: String) {
+        self.name = name
+    }
+ 
+    deinit {
+        print("Deinit!")
+    }
+}
+
+var human: Human? = .init(name: "NAME")
+print(human!.getName())  //
+
+
+human = nil  // deinit 호출됨
+```
+
+<br/>
+
+#### 위와 같은 코드에서 lazy 클로저 부분은 인스턴스가 메모리에 존재해야만 접근할 수 있고, 이는 self가 반드시 존재한다는 의미이므로 unowned를 사용하여 옵셔널바인딩 없이 사용이 가능
