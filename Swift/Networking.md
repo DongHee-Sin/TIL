@@ -47,7 +47,7 @@ let session2 = URLSession(configuration: .default)
 <br/>
 
 ### (3) Session에 (일시정지 상태로) 작업 부여
-#### dataTask : HTTP통신을 수행하는 메서드
+#### dataTask : HTTP통신을 수행하는 메서드 **(내부적으로 비동기적 처리가 되어있음)**
 ```swift
 // 매개변수 : 1) URL / 2) 컴플리션 핸들러(클로저)
 // url주소로 네트워크 통신을 수행한 후 결과를 핸들러의 매개변수(Optional)로 준다.
@@ -206,7 +206,11 @@ let task = session.dataTask(with: url) { (data, response, error) in
 <br/>
 
 ## 실제 네트워킹 예시
-#### escaping closure를 사용하는 이유 : 네트워킹 과정이 비동기적으로 작동하기 때문 => 네트워킹이 끝나면 동작하도록 함
+#### escaping closure를 사용하는 이유 : 비동기적으로 동작하는 네트워킹 작업이 끝난 후 필요한 작업을 하기 위해
+#### 일반 return문을 사용하여 네트워킹 작업의 response를 반환하려 한다면 항상 nil이 반환된다. (네트워킹 작업이 끝나기 전에 값을 반환하기 때문)
+1. 네트워킹 작업을 수행할 함수의 매개변수로 completionHandler 클로저를 받도록 작성한다.
+2. 네트워킹 작업이 끝나면 매개변수로 받은 클로저를 실행한다. (클로저의 매개변수로 네트워킹 작업의 response를 전달)
+3. 함수를 실행하는 곳에서 completionHandler의 기능을 정의한다. (매개변수로 들어온 네트워킹 결과 response를 사용)
 
 <br/>
 
@@ -379,6 +383,7 @@ let movieManager = MovieDataManager()
 
 
 // 실제 다운로드 코드
+// completionHandler의 기능을 후행클로저로 정의 : 매개변수로 movies(네트워킹의 response)를 사용하는 코드
 movieManager.fetchMovie(date: "20210201") { (movies) in
     // movies = [Movie](데이터) or nil
     if let movies = movies {
