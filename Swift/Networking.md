@@ -402,6 +402,48 @@ movieManager.fetchMovie(date: "20210201") { (movies) in
 <br/>
 <br/>
 
+## Result Type을 사용한 네트워킹
+```swift
+func performRequest2(with urlString: String, completion: @escaping (Result<Data,NetworkError>) -> Void) {
+    
+    guard let url = URL(string: urlString) else { return }
+    
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
+        if error != nil {
+            print(error!)                    
+            completion(.failure(.someError))  // 실패 케이스 전달
+            return
+        }
+        
+        guard let safeData = data else {
+            completion(.failure(.someError))   // 실패 케이스 전달
+            return
+        }
+    
+        completion(.success(safeData))      // 성공 케이스 전달
+       
+        
+    }.resume()
+}
+
+
+
+                            //    result : Result<Data,NetworkError>
+performRequest2(with: "URL주소") { result in
+    switch result {
+    case .failure(let error):
+        print(error)
+    case .success(let data):
+        // 데이터 처리 관련 코드
+        break
+    }
+}
+```
+
+
+<br/>
+<br/>
+
 ---
 
 <br/>
