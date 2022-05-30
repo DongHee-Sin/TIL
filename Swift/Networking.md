@@ -662,6 +662,20 @@ func deleteMethod() {
 deleteMethod()
 ```
 
+<br/>
+<br/>
+
+## ☝️ request에 Header가 필요한 경우!!
+#### URLRequest 인스턴스를 생성한다.
+#### 생성된 인스턴스에서 setValue메서드를 통해 필요한 header를 등록한다.
+#### URLSession의 dataTask의 매개변수로 URLRequest를 주면 된다.!!
+```swift
+var request = URLRequest(url: url)
+        
+request.setValue(NaverKey.naverClientID, forHTTPHeaderField: "X-Naver-Client-Id")
+request.setValue(NaverKey.naverKey, forHTTPHeaderField: "X-Naver-Client-Secret")
+```
+
 <br>
 <br>
 
@@ -692,3 +706,5 @@ deleteMethod()
 #### [공식문서](https://github.com/Moya/Moya)
 #### [우형 기술블로그](https://techblog.woowahan.com/2704/)
 #### Network Layer를 템플릿화 하여 재사용성을 높이고, 테스트가 용이하며 개발자가 request, response에만 신경쓸 수 있도록 해준다.
+
+
