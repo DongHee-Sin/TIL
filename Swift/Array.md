@@ -143,7 +143,7 @@ someArray[0...1] = []   // [3, 4, 5]
 <br/>
 
 ## enumerate
-열거된 것들을 Named 튜플 형태로 전달<br/>
+열거된 데이터를 Named 튜플 형태로 전달<br/>
 index와 element를 튜플로 받아서 사용할 수 있음
 ```swift
 var someArray: [Int] = [10, 20, 30, 40, 50]
@@ -174,6 +174,27 @@ for tuple in someArray.enumerated() {
 for tuple in someArray.enumerated() {
     print(tuple.offset)
     print(tuple.element)
+}
+```
+
+<br/>
+
+---
+
+<br/>
+
+## zip
+#### 두 개의 시퀸스를 매개변수로 입력받고, 튜플쌍의 시퀸스를 반환한다.
+```swift
+let someArr1: [String] = ["kim", "park", "lee"]
+let someArr2: [Int] = [1, 2, 3]
+
+// type : Zip2Sequence<[String], [Int]>
+let zipSequence = zip(someArr1, someArr2)
+
+for eachData in zipSequence {
+    print(eachData.0)
+    print(eachData.1)
 }
 ```
 
