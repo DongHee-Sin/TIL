@@ -37,6 +37,7 @@
 ### **@available**
 * 특정 버전 이상에서만 사용이 가능하다는 의미
 * **컴파일러가** API의 사용가능성을 결정
+* 컴파일타임에 경고 또는 오류를 생성한다.
    ```swift
    @available(iOS 10.0, macOS 10.12, *)
    class SomeType { ... }
@@ -45,8 +46,24 @@
    func doSomething() { ... }
    ```
 
-* vs **#available** 키워드
-   * 조건문에서 사용 (if / guard / while)
+<br/>
+
+### **unavailable**
+* @available과 함께 사용하여, 특정 플랫폼에 대한 비가용성을 정의한다.
+   ```swift
+   // 모든 플랫폼에서 unavailable
+   // 사용하려고 하면, 컴파일 에러를 발생시킨다. (쓰긴 쓰는거같은데.. 왜 쓰는지 이해가 잘 안간다ㅠ)
+   @available(*, unavailable)
+
+   // 특정 플랫폼에서만 unavailable
+   // macOS에서만 사용할 수 없는 상태로 만든다.
+   @available(macOS, unavailable)
+   ```
+
+<br/>
+
+### **#available** 키워드
+   * Bool타입을 반환하여 조건문에서 "조건 판별"을 위해 사용된다. (if / guard / while)
    * 버전 조건에 맞는 경우에만 조건문을 실행
    * **런타임 시점**에 API의 사용가능성을 결정
       ```swift
