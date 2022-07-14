@@ -34,13 +34,24 @@ for value in array {
 <br/>
 
 # AnyObject
-### 클래스의 인스턴스만 저장할 수 있는 타입
+### 클래스의 인스턴스만 저장할 수 있는 타입 
 ### AnyObject도 사용하기 위해서는 타입캐스팅 과정이 필요하다.
 
 <br/>
 
 ```swift
 let objArray: [AnyObject] = [Person(), Superman(), NSString()]
+```
+
+<br/>
+
+### 실제로 AnyObject는 모든 클래스 타입이 암시적으로 준수하는 **프로토콜**이다.
+그래서 범용적인 타입으로써(클래스의 인스턴스) 사용이 가능했던 것 <br/>
+AnyObject 프로토콜을 상속하여 클래스에서만 사용될 수 있는 프로토콜을 만들 수 있다.
+```swift
+protocol SomeProtocol: AnyObject {
+    func doSomething()
+}
 ```
 
 <br/>
