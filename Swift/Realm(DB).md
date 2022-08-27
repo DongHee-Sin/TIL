@@ -193,7 +193,7 @@ tasks = localRealm.objects(Shopping.self).sorted(byKeyPath: "title", ascending: 
 
 <br/>
 
-필터링을 하려면 미리 가져온 테이블이 있어야 한다. (테이블을 저장한 변수를 기반으로 필터링하는 것)
+필터링을 하려면 미리 가져온 테이블이 있어야 한다. (테이의 데이터를 기반으로 필터링하는 것)
 ```swift
 // 2. where문 사용
 tasks = localRealm.objects(Shopping.self).sorted(byKeyPath: "title", ascending: true)
@@ -258,6 +258,112 @@ func removeMemo(at index: Int) {
     }
     catch {
         print("삭제 실패")
+    }
+}
+```
+
+<br/>
+<br/>
+
+---
+
+<br/>
+<br/>
+
+## Realm Database에 옵저버 등록하기 (didSet)
+[공식문서](https://www.mongodb.com/docs/realm/sdk/swift/react-to-changes/#register-a-realm-change-listener)
+
+<br/>
+
+### Realm 전체에 등록
+* Observe realm notifications. Keep a strong reference to the notification token or the observation will stop.
+* token이 메모리에서 해제되면 옵저빙도 해제된다.
+```swift
+let realm = try! Realm()
+
+let token = realm.observe { notification, realm in
+    // `notification`은 어떤 종류의 알림이 발생했는지 확인할 수 있는 열거형
+    viewController.updateUI()
+}
+```
+
+<br/>
+<br/>
+
+### 특정 테이블에 등록
+* write transaction을 통해 추가, 변경, 삭제가 이루어지면 호출
+* token이 메모리에서 해제되면 옵저빙도 해제된다.
+```swift
+class RealmViewController: UIViewController {
+    
+    // 토큰
+    var notificationToken: NotificationToken?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let realm = try! Realm()
+        let tableToObserve = realm.objects(Shopping.self)   // 옵저버를 등록할 테이블
+        
+        notificationToken = tableToObserve.observe { [weak self] (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                // Results are now populated and can be accessed without blocking the UI
+            case .update(_, let deletions, let insertions, let modifications):
+                // Query results have changed, so apply them to the UITableView
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+            }
+        }
+    }
+}
+```
+
+<br/>
+<br/>
+
+### 특정 객체(레코드)에 등록
+* 객체가 삭제되거나 내부 속성이 변경될 때 호출된다.
+```swift
+// Define the dog class.
+class Dog: Object {
+    @Persisted var name = ""
+}
+
+// 토큰
+var objectNotificationToken: NotificationToken?
+
+
+func objectNotificationExample() {
+    // 옵저버 등록할 객체(레코드)
+    let dog = Dog()
+    dog.name = "Max"
+    
+    // Open the default realm.
+    let realm = try! Realm()
+
+    // Realm에 옵저버 등록할 객체(레코드) 등록
+    try! realm.write {
+        realm.add(dog)
+    }
+
+    // 토큰에 옵저버 등록
+    objectNotificationToken = dog.observe { change in
+        switch change {
+        case .change(let object, let properties):
+            for property in properties {
+                print("Property '\(property.name)' of object \(object) changed to '\(property.newValue!)'")
+            }
+        case .error(let error):
+            print("An error occurred: \(error)")
+        case .deleted:
+            print("The object was deleted.")
+        }
+    }
+
+    // 속성이 변경되면 옵저버가 호출된다.
+    try! realm.write {
+        dog.name = "Wolfie"
     }
 }
 ```
