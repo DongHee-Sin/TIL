@@ -270,6 +270,23 @@ func removeMemo(at index: Int) {
 <br/>
 <br/>
 
+## 열거형을 스키마로 사용 (PersistableEnum)
+PersistableEnum프로토콜을 채택하여 열거형을 스키마 타입으로 사용할 수 있다.
+```swift
+enum FolderSection: PersistableEnum {
+    case local
+    case iCloud
+}
+```
+
+<br/>
+<br/>
+
+---
+
+<br/>
+<br/>
+
 ## Realm Database에 옵저버 등록하기 (didSet)
 [공식문서](https://www.mongodb.com/docs/realm/sdk/swift/react-to-changes/#register-a-realm-change-listener)
 
