@@ -63,7 +63,11 @@
 * [Defer](/Swift/Defer.md)
 * [Any / AnyObject](/Swift/Any%EC%99%80%20AnyObject.md)
 * [제곱과 제곱근](/Swift/%EC%A0%9C%EA%B3%B1%EA%B3%BC%20%EC%A0%9C%EA%B3%B1%EA%B7%BC.md)
+
+<br/>
+
 * [Realm(DB)](/Swift/Realm(DB).md)
+* [AutoReleasePool](/Swift/AutoReleasePool.md)
 
 <br/>
 <br/>
