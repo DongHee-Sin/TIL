@@ -69,6 +69,7 @@
 * [Realm(DB)](/Swift/Realm(DB).md)
 * [AutoReleasePool](/Swift/AutoReleasePool.md)
 * [Property Wrapper](https://co-dong.tistory.com/67)
+* [Operation & OperationQueue](https://co-dong.tistory.com/78)
 
 <br/>
 <br/>
