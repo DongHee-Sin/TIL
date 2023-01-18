@@ -82,6 +82,7 @@
 * [Sandbox](https://co-dong.tistory.com/64)
 * [LifeCycle](https://co-dong.tistory.com/62)
 * [IBOutlet : Strong VS Weak](https://co-dong.tistory.com/60)
+* [ATS : App Transport Security](https://co-dong.tistory.com/68)
 
 <br/>
 <br/>
@@ -90,7 +91,6 @@
 * [동적 계획법](/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/%EB%8F%99%EC%A0%81%20%EA%B3%84%ED%9A%8D%EB%B2%95.md)
 * [이진탐색](/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/%EC%9D%B4%EC%A7%84%ED%83%90%EC%83%89.md)
 * [정렬 알고리즘](/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/%EC%A0%95%EB%A0%AC%20%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98.md)
-* [ATS : App Transport Security](https://co-dong.tistory.com/68)
 
 <br/>
 <br/>
