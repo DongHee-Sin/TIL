@@ -116,3 +116,70 @@ case .failure(let error):
 <br/>
 
 > ### Result Type은 기존의 에러처리 패턴을 대체하려는 목적이 아니라 개발자에게 에러처리에 대한 다양한 선택지를 제공하기 위한 문법이다.
+
+<br/>
+<br/>
+
+---
+
+<br/>
+<br/>
+
+## ResultType with Alamofire
+Alamofire를 사용한 네트워크 코드 개선
+
+<br/>
+
+### 기존에 사용하던 방식
+completion의 매개변수로 3개의 Optional Type을 전달하기 때문에 실제 코드를 사용하는 부분에서 옵셔널 바인딩이 필요하다.
+```swift
+func request<T: Decodable>(type: T.Type, router: Router, completion: @escaping (T?, AFError?, Int?) -> Void) {
+
+    AF.request(router)
+        .responseDecodable(of: type) { response in
+            switch response.result {
+            case .success(let result): completion(result, nil, response.response?.statusCode)
+            case .failure(let error): completion(nil, error, response.response?.statusCode)
+        }
+    }
+}
+```
+
+<br/>
+
+### ResultType 적용
+성공과 실패에 대한 정보를 담은 열거형으로 반환하기 때문에 사용하는 부분에서 Switch문으로 간편하게 처리가 가능하다.
+```swift
+func request<T: Decodable>(type: T.Type, router: Router, completion: @escaping (Result<T, AFError>) -> Void) {
+        
+    AF.request(router)
+        .responseDecodable(of: type) { response in
+            switch response.result {
+            case .success(let result): completion(.success(result))
+            case .failure(let error): completion(.failure(error))
+        }
+    }
+}
+```
+
+<br/>
+<br/>
+
+### 결과값이 없는 통신이라면?
+불필요하게 괄호()가 많이 사용되어 가독성에 방해가 될 수 있다.
+```swift
+completion(.success(()))
+```
+
+<br/>
+
+이를 해결하기 위해 ResultType을 확장하여 처리할 수 있다.
+```swift
+// Extension
+extension Result where Success == Void {
+    static var success: Result { .success(()) }
+}
+
+// 사용
+completion(.success)
+```
