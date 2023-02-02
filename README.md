@@ -70,7 +70,7 @@
 * [AutoReleasePool](/Swift/AutoReleasePool.md)
 * [Property Wrapper](https://co-dong.tistory.com/67)
 * [Operation & OperationQueue](https://co-dong.tistory.com/78)
-* [Class VS Struct](https://co-dong.tistory.com/79)
+* [Choosing Between Structures and Classes](https://co-dong.tistory.com/79)
 
 <br/>
 <br/>
