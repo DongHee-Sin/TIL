@@ -91,6 +91,7 @@
 
 ## WWDC
 * [WWDC16) Understanding Swift Performance - 1](https://co-dong.tistory.com/80)
+* [WWDC16) Understanding Swift Performance - 2](https://co-dong.tistory.com/81)
 
 <br/>
 <br/>
